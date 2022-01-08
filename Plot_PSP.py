@@ -19,8 +19,9 @@ import pandas as pd
 
 # To make the plot COOL
 plt.style.use('dark_background')
-raw_path = "PSP_raw.txt"
-goodfile_path = "PSP.csv"
+raw_path = "Gaia.txt"
+goodfile_path = "Gaia.csv"
+finalimage_path = "Gaia.png"
 Figfacecolor = '#333333'
 Axfacecolor = '#1c1c1c'
 color_r = 'yellow'
@@ -41,13 +42,13 @@ def transform_raw(raw_path):
     
     text2 = list(Labels+'\n') + list(text[LS+1:LE])
     
-    f2 = open("PSP.csv",'w')
+    f2 = open(goodfile_path,'w')
     for line in text2:
         f2.write(line)
     f2.close()
     return 
 
-def Plot_Data(goodfile_path):
+def Plot_rv(goodfile_path):
     # Now to plot the data we want
     
     D = pd.read_csv(goodfile_path)
@@ -73,11 +74,30 @@ def Plot_Data(goodfile_path):
     ax2.set_ylabel("Velocity relative to Sun (km/s)")
     
     plt.tight_layout()
-    plt.savefig("PSP.png", dpi=300, facecolor='#333333')
+    plt.savefig(finalimage_path, dpi=300, facecolor='#333333')
+    plt.show()
+
+def Plot_xy(goodfile_path):
+    D = pd.read_csv(goodfile_path)
+    fig, ax = plt.subplots(facecolor=Figfacecolor)
+    
+    ax.plot(D['X'], D['Y'], color='yellow')
+    ax.set_aspect('equal', adjustable='box')
+    plt.show()
+    
+def Plot_xyz(goodfile_path):
+    D = pd.read_csv(goodfile_path)
+    fig = plt.figure(facecolor=Figfacecolor)
+    ax = fig.gca(projection='3d')
+    
+    ax.plot(D['X'], D['Y'], D['Z'], color='yellow')
+    #ax.set_aspect('equal', adjustable='box')
     plt.show()
 
 def main():
     transform_raw(raw_path)
-    Plot_Data(goodfile_path)
+    #Plot_rv(goodfile_path)
+    #Plot_xy(goodfile_path)
+    Plot_xyz(goodfile_path)
 
 main()
