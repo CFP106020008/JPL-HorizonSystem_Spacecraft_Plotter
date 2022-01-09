@@ -19,9 +19,9 @@ import pandas as pd
 
 # To make the plot COOL
 plt.style.use('dark_background')
-raw_path = "Gaia.txt"
-goodfile_path = "Gaia.csv"
-finalimage_path = "Gaia.png"
+raw_path = "PSP.txt"
+goodfile_path = "PSP.csv"
+finalimage_path = "PSP.png"
 Figfacecolor = '#333333'
 Axfacecolor = '#1c1c1c'
 color_r = 'yellow'
@@ -77,27 +77,63 @@ def Plot_rv(goodfile_path):
     plt.savefig(finalimage_path, dpi=300, facecolor='#333333')
     plt.show()
 
+def Plot_phasespace(goodfile_path):
+    D = pd.read_csv(goodfile_path)
+    fig, ax = plt.subplots(facecolor=Figfacecolor)
+    
+    D['r'] = np.sqrt(D.X**2 + D.Y**2 + D.Z**2)
+    D['v'] = np.sqrt(D.VX**2 + D.VY**2 + D.VZ**2)
+    
+    ax.plot(D['r'], D['v'], color='yellow')
+    plt.show()
+    
 def Plot_xy(goodfile_path):
     D = pd.read_csv(goodfile_path)
     fig, ax = plt.subplots(facecolor=Figfacecolor)
     
     ax.plot(D['X'], D['Y'], color='yellow')
     ax.set_aspect('equal', adjustable='box')
-    plt.show()
+    plt.show()    
     
 def Plot_xyz(goodfile_path):
     D = pd.read_csv(goodfile_path)
-    fig = plt.figure(facecolor=Figfacecolor)
-    ax = fig.gca(projection='3d')
+    fig = plt.figure(facecolor=Axfacecolor)
+    ax = fig.gca(projection='3d', facecolor=Axfacecolor)
+    
+    rmax = np.max((D['X']**2 + D['Y'] + D['Z']**2)**0.5)*0.75
+    
+    ax.quiver(-rmax, 0, 0, 2*rmax, 0, 0, color='w', arrow_length_ratio=0.05) # x-axis
+    ax.quiver(0, -rmax, 0, 0, 2*rmax, 0, color='w', arrow_length_ratio=0.05) # y-axis
+    ax.quiver(0, 0, -rmax, 0, 0, 2*rmax, color='w', arrow_length_ratio=0.05) # z-axis
     
     ax.plot(D['X'], D['Y'], D['Z'], color='yellow')
-    #ax.set_aspect('equal', adjustable='box')
+    
+    ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+    ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+    ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+    
+    ax.w_xaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
+    ax.w_yaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
+    ax.w_zaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
+    
+    ax.xaxis._axinfo["grid"]['color'] =  (1,1,1,0)
+    ax.yaxis._axinfo["grid"]['color'] =  (1,1,1,0)
+    ax.zaxis._axinfo["grid"]['color'] =  (1,1,1,0)
+    
+    ax.set_xticks([]) 
+    ax.set_yticks([]) 
+    ax.set_zticks([])
+    
+    ax.set_xlim([-rmax, rmax])
+    ax.set_ylim([-rmax, rmax])
+    ax.set_zlim([-rmax, rmax])
     plt.show()
 
 def main():
     transform_raw(raw_path)
     #Plot_rv(goodfile_path)
     #Plot_xy(goodfile_path)
-    Plot_xyz(goodfile_path)
+    Plot_phasespace(goodfile_path)
+    #Plot_xyz(goodfile_path)
 
 main()
