@@ -1,4 +1,112 @@
-JDTDB,Calendar Date (TDB),X,Y,Z,VX,VY,VZ,LT,RG,RR,
+﻿*******************************************************************************
+ Revised: Nov 12, 2021         Parker Solar Probe / Sun                    -96
+                         http://parkersolarprobe.jhuapl.edu/ 
+
+ BACKGROUND:
+  The Parker Solar Probe Mission will use seven Venus gravity assist flybys 
+  over nearly seven years to gradually bring the spacecraft's trajectory closer
+  to the Sun, which it will orbit at least 24 times with a final solar orbit
+  period of 88 days.
+
+  The spacecraft will fly through the Sun's outer corona, 5.9 million km from 
+  the surface (8.5 solar radii).
+
+  The orbit will be highly elliptical to minimize the time spent closest
+  to the Sun, where incident solar radiation will be approximately 520 times 
+  the intensity at Earth and temperatures near 2500 deg. F (1377 C).
+ 
+ LAUNCH
+  Date:           2018-Aug-12 07:31 UTC from NASA Kennedy Space Center
+                  Complex 37
+  Launch vehicle: Delta IV Heavy with Upper Stage
+
+ EVENTS
+  2018
+    2018-Oct-03: Venus Flyby #1 @ 8:44 UTC
+    2018-Nov-06: Perihelion #1 @ 03:27 UTC
+  2019
+    2019-Jan-19: Aphelion #1
+    2019-Jan-20: Second orbit begins
+    2019-Apr-04: Perihelion #2
+    2019-Sep-01: Perihelion #3
+    2019-Dec-26: Venus flyby #2
+  2020
+    2020-Jan-29: Perihelion #4
+    2020-Jun-07: Perihelion #5
+    2020-Jul-11: Venus flyby #3
+    2020-Sep-27: Perihelion #6 
+  2021
+    2021-Jan-17: Perihelion #7
+    2021-Feb-20: Venus flyby #4
+    2021-Apr-29: Perihelion #8
+    2021-Aug-09: Perihelion #9 
+    2021-Oct-16: Venus flyby #5
+    2021-Nov-21: Perihelion #10
+  2022
+    2022-Feb-25: Perihelion #11
+    2022-Jun-01: Perihelion #12
+    2022-Sep-06: Perihelion #13
+    2022-Dec-11: Perihelion #14
+  2023
+    2023-Mar-17: Perihelion #15
+    2023-Jun-22: Perihelion #16
+    2023-Aug-21: Venus flyby #6
+    2023-Sep-27: Perihelion #17
+    2023-Dec-29: Perihelion #18
+  2024
+    2024-Mar-30: Perihelion #19
+    2024-Jun-30: Perihelion #20
+    2024-Sep-30: Perihelion #21
+    2024-Nov-06: Venus flyby #7 (last one)
+    2024-Dec-24: Perihelion #22 (first close approach)
+  2025
+    2025-Mar-22: Perihelion #23
+    2025-Jun-19: Perihelion #24
+
+ GOALS
+  * Determine the structure and dynamics of the magnetic fields at the 
+     sources of solar wind.
+  * Trace the flow of energy that heats the corona and accelerates the solar 
+     wind.
+  * Determine what mechanisms accelerate and transport energetic particles.
+  * Explore dusty plasma near the Sun and its influence on solar wind and 
+     solar energetic particles formation.
+
+ SPACECRAFT TRAJECTORY 
+  Fit to post-launch tracking data 2018(Aug)-2021(May). Reference planning 
+  trajectory for times after May 09, 2021.
+
+  NOTE: the reference trajectory through 2025 will be updated when revised 
+   instead of presenting more-frequent but short-term local OD reconstructions.
+
+  Name                                      Start (TDB)         End (TDB) 
+  ---------------------------------------  -----------------  -----------------
+  spp_nom_20180812_20250831_v038_RO5       2018-Aug-12 08:17  2025-Aug-31 06:10
+*******************************************************************************
+
+
+*******************************************************************************
+Ephemeris / WWW_USER Wed Jan 12 20:08:54 2022 Pasadena, USA      / Horizons
+*******************************************************************************
+Target body name: Parker Solar Probe (spacecraft) (-96) {source: Parker_Solar_Probe}
+Center body name: Sun (10)                        {source: DE441}
+Center-site name: BODY CENTER
+*******************************************************************************
+Start time      : A.D. 2018-Aug-12 08:16:23.3440 TDB
+Stop  time      : A.D. 2022-Feb-12 00:00:00.0000 TDB
+Step-size       : 360 minutes
+*******************************************************************************
+Center geodetic : 0.00000000,0.00000000,0.0000000 {E-lon(deg),Lat(deg),Alt(km)}
+Center cylindric: 0.00000000,0.00000000,0.0000000 {E-lon(deg),Dxy(km),Dz(km)}
+Center radii    : 696000.0 x 696000.0 x 696000.0 k{Equator, meridian, pole}    
+Output units    : KM-S
+Output type     : GEOMETRIC cartesian states
+Output format   : 3 (position, velocity, LT, range, range-rate)
+Reference frame : Ecliptic of B1950.0
+*******************************************************************************
+            JDTDB,            Calendar Date (TDB),                      X,                      Y,                      Z,                     VX,                     VY,                     VZ,                     LT,                     RG,                     RR,
+**************************************************************************************************************************************************************************************************************************************************************************
+$$SOE
 2458342.844714629, A.D. 2018-Aug-12 08:16:23.3440,  1.137727313014849E+08, -1.001817578323271E+08,  7.666022705428302E+03,  8.822248412297073E+00,  1.183573299437098E+01, -2.758099629571775E+00,  5.056618145851346E+02,  1.515935983112177E+08, -1.200673275157988E+00,
 2458343.094714629, A.D. 2018-Aug-12 14:16:23.3440,  1.140061961936518E+08, -9.990345153041409E+07, -3.059177616284788E+04,  1.095471530109885E+01,  1.309348983174252E+01, -1.708384505126874E+00,  5.056342461620243E+02,  1.515853335058903E+08, -3.900584642517846E-01,
 2458343.344714629, A.D. 2018-Aug-12 20:16:23.3440,  1.142422908570461E+08, -9.961920805654283E+07, -6.737956083034724E+04,  1.089771688529286E+01,  1.321648428641598E+01, -1.699830082624193E+00,  5.056032053433080E+02,  1.515760277025490E+08, -4.718491643878627E-01,
@@ -5118,3 +5226,65 @@ JDTDB,Calendar Date (TDB),X,Y,Z,VX,VY,VZ,LT,RG,RR,
 2459621.844714629, A.D. 2022-Feb-11 08:16:23.3440,  7.075438166071366E+07, -1.082650465413543E+07, -4.219265188740702E+06, -2.958921279905771E+01,  2.577503589386787E+01,  2.074348013254593E+00,  2.391726188444186E+02,  7.170214728966537E+07, -3.321200711369718E+01,
 2459622.094714629, A.D. 2022-Feb-11 14:16:23.3440,  7.010927053552052E+07, -1.026886128340804E+07, -4.174102612404638E+06, -3.014526133410267E+01,  2.585829845624142E+01,  2.107480132769201E+00,  2.367643131089034E+02,  7.098015539359973E+07, -3.364030956533757E+01,
 2459622.344714629, A.D. 2022-Feb-11 20:16:23.3440,  6.945201966882367E+07, -9.709440202002317E+06, -4.128217274986093E+06, -3.071335211935687E+01,  2.593961083861114E+01,  2.141275047959915E+00,  2.343248819311670E+02,  7.024883232470433E+07, -3.407605514876929E+01,
+$$EOE
+**************************************************************************************************************************************************************************************************************************************************************************
+ 
+TIME
+
+  Barycentric Dynamical Time ("TDB" or T_eph) output was requested. This
+continuous relativistic coordinate time is equivalent to the relativistic
+proper time of a clock at rest in a reference frame comoving with the
+solar system barycenter but outside the system's gravity well. It is the
+independent variable in the solar system relativistic equations of motion.
+
+  TDB runs at a uniform rate of one SI second per second and is independent
+of irregularities in Earth's rotation.
+
+  Calendar dates prior to 1582-Oct-15 are in the Julian calendar system.
+Later calendar dates are in the Gregorian system.
+
+REFERENCE FRAME AND COORDINATES
+
+  Ecliptic at the standard reference epoch
+
+    Reference epoch: B1950.0
+    X-Y plane: adopted Earth orbital plane at the reference epoch
+               Note: obliquity of 84404.8362512 arcseconds wrt FK4 equator
+    X-axis   : ICRF
+    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense
+               of Earth's north pole at the reference epoch.
+
+  Symbol meaning:
+
+    JDTDB    Julian Day Number, Barycentric Dynamical Time
+      X      X-component of position vector (km)
+      Y      Y-component of position vector (km)
+      Z      Z-component of position vector (km)
+      VX     X-component of velocity vector (km/sec)                           
+      VY     Y-component of velocity vector (km/sec)                           
+      VZ     Z-component of velocity vector (km/sec)                           
+      LT     One-way down-leg Newtonian light-time (sec)
+      RG     Range; distance from coordinate center (km)
+      RR     Range-rate; radial velocity wrt coord. center (km/sec)
+
+ABERRATIONS AND CORRECTIONS
+
+ Geometric state vectors have NO corrections or aberrations applied.
+
+Computations by ...
+
+    Solar System Dynamics Group, Horizons On-Line Ephemeris System
+    4800 Oak Grove Drive, Jet Propulsion Laboratory
+    Pasadena, CA  91109   USA
+
+    General site: https://ssd.jpl.nasa.gov/
+    Mailing list: https://ssd.jpl.nasa.gov/email_list.html
+    System news : https://ssd.jpl.nasa.gov/horizons/news.html
+    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html
+    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x
+                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html
+                  command-line   telnet ssd.jpl.nasa.gov 6775
+                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/hrzn_batch.txt
+                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS
+    Author      : Jon.D.Giorgini@jpl.nasa.gov
+*******************************************************************************
