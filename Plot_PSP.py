@@ -31,8 +31,6 @@ Axfacecolor = '#1c1c1c'
 color_r = 'yellow'
 color_v = 'skyblue'
 
-r_E = 1.5e8
-
 def transform_raw(raw_path, goodfile_path):
     # Here we transform the original data from 
     # NASA JPL Horizon System to a format 
@@ -122,8 +120,6 @@ def Plot_xyz(goodfile_path, ax, i, Color='yellow', Axis=False, start=0):
     ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     
     ax.scatter(0,0,0,color='yellow',s=100)
-    theta = np.linspace(0, 2*np.pi, int(1e3))
-    ax.plot(r_E*np.cos(theta), r_E*np.sin(theta), color='blue')
     
     ax.w_xaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
     ax.w_yaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
@@ -162,7 +158,7 @@ def Plot_r(good_path, ax, i=0, Dot=False):
     ax.set_ylabel("Distance to Sun (km)")
     ax.set_xlim([0, np.array(D['days'])[-1]])
     ax.set_xticks([])
-    ax.set_ylim([0,1.5e8])
+    ax.set_ylim([0,1.6e8])
     
     ax.scatter(D.days[i], D.r[i], s=10, color=color_v)
     
@@ -209,12 +205,6 @@ def Complex_1(i, Dot=True):
                   width_ratios=[4,4,3,3]
                   )
     ax1 = fig.add_subplot(gs[:,:2],projection='3d', facecolor=Axfacecolor)
-    ax1 = Plot_xyz(goodfile_path, 
-                   ax1, 
-                   i, 
-                   Axis=True,
-                   start=max(0, i-100))
-    
     
     # This is Venus
     ax1 = Plot_xyz(Venus_path, 
@@ -222,6 +212,24 @@ def Complex_1(i, Dot=True):
                    i, 
                    Color='orange', 
                    start=0)
+    # This is Earth
+    ax1 = Plot_xyz("Earth.csv", 
+                   ax1, 
+                   i, 
+                   Color='skyblue', 
+                   start=0)
+    # This is Mercury
+    ax1 = Plot_xyz("Mercury.csv", 
+                   ax1, 
+                   i, 
+                   Color='gray', 
+                   start=0)
+    # This is PSP
+    ax1 = Plot_xyz(goodfile_path, 
+                   ax1, 
+                   i, 
+                   Axis=True,
+                   start=max(0, i-100))
     ax2 = fig.add_subplot(gs[0,2:])
     ax2 = Plot_r(goodfile_path, ax2, i)
     ax3 = fig.add_subplot(gs[1,2:])
@@ -233,12 +241,14 @@ def Complex_1(i, Dot=True):
 def main():
     transform_raw(raw_path, goodfile_path)
     transform_raw(Venus_raw, Venus_path)
+    transform_raw("Earth.txt", "Earth.csv")
+    transform_raw("Mercury.txt", "Mercury.csv")
     D = pd.read_csv(goodfile_path)
     N = D['X'].size
     fps= 30
     t = 20
     n = fps*t
-    print(N)
+    #Complex_1(100)
     for i in tqdm(np.linspace(0, N-1, n).astype(int)):
         Complex_1(i)
     #Plot_rv(goodfile_path)
