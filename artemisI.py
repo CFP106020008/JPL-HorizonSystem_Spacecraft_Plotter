@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import pandas as pd
 from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
 from matplotlib.patches import Rectangle
 import path
 from os import walk
@@ -79,7 +80,7 @@ def Plot_rv(goodfile_path):
     
     # Plot v part
     ax2.plot(D.days, D.v, color=color_v)
-    ax2.set_ylabel("Velocity relative to Sun (km/s)")
+    ax2.set_ylabel("Velocity relative to the Earth (km/s)")
     
     plt.tight_layout()
     plt.savefig(finalimage_path, dpi=300, facecolor='#333333')
@@ -103,7 +104,7 @@ def Plot_xy(goodfile_path):
     ax.set_aspect('equal', adjustable='box')
     #plt.show()    
     
-def Plot_xyz(goodfile_path, ax, i, Color='yellow', Axis=False, start=0):
+def Plot_xyz(goodfile_path, ax, i, Name, Color='yellow', Axis=False, start=0):
     D = pd.read_csv(goodfile_path)
     #fig = plt.figure(facecolor=Figfacecolor, figsize=(6,6))
     #ax = fig.add_subplot(projection='3d', facecolor=Axfacecolor)
@@ -111,8 +112,18 @@ def Plot_xyz(goodfile_path, ax, i, Color='yellow', Axis=False, start=0):
     #rmax = np.max((D['X'][:i]**2 + D['Y'][:i]**2 + D['Z'][:i]**2)**0.5)
     rmax = np.max((D['X']**2 + D['Y']**2 + D['Z']**2)**0.5)
     
-    ax.plot(D['X'][start:i], D['Y'][start:i], D['Z'][start:i], color=Color)
-    ax.scatter(D['X'][i], D['Y'][i], D['Z'][i], color=Color, s=10)
+    ax.plot(D['X'][start:i], 
+            D['Y'][start:i], 
+            D['Z'][start:i], 
+            color=Color,
+            )
+    ax.scatter( D['X'][i], 
+                D['Y'][i], 
+                D['Z'][i], 
+                color=Color, 
+                s=10,
+                label=Name)
+    ax.legend()
     
     ax.w_xaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
     ax.w_yaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
@@ -179,7 +190,7 @@ def Plot_v(good_path, ax, i=0, Dot=False):
     ax.plot(D.days[:i], D.v[:i], color=color_v)
     ax.set_facecolor(Axfacecolor)
     ax.set_xlabel("Mission time (days)")
-    ax.set_ylabel("Velocity relative to Sun (km/s)")
+    ax.set_ylabel("Velocity relative to the Earth (km/s)")
     ax.set_ylim([0,np.max(D['v'])*1.1])
     
     ax.scatter(D.days[i], D.v[i], s=10, color=color_v)
@@ -218,7 +229,7 @@ def decorate(ax):
     
 
 def Complex_1(i, Dot=True):
-    print('Now working on frame {}'.format(i))
+    #print('Now working on frame {}'.format(i))
     fig = plt.figure(figsize=(32/3,6), facecolor=Figfacecolor)
     gs = GridSpec(2, 4, figure=fig,
                   left = 0.0625/1.5,
@@ -236,16 +247,20 @@ def Complex_1(i, Dot=True):
     ax1 = Plot_xyz(Moon_path, 
                    ax1, 
                    i, 
+                   'Moon',
                    Color='gray', 
                    Axis=True,
-                   start=0)
+                   start=0
+                   )
     
     
     # This is Orion
     ax1 = Plot_xyz(goodfile_path, 
                    ax1, 
                    i, 
-                   start=max(0, i-100))
+                   'Orion Spacecraft',
+                   start=max(0, i-100),
+                   )
     ax1 = decorate(ax1)
     ax2 = fig.add_subplot(gs[0,2:])
     ax2 = Plot_r(goodfile_path, ax2, i)
@@ -267,7 +282,7 @@ def get_missing_frames():
     f = sorted(list(set(list(np.arange(0,912))) - set(f)))
     #print(f)
     return f
-def square(x): return x**2
+
 def main():
     transform_raw(raw_path, goodfile_path)
     transform_raw(Moon_raw, Moon_path)
@@ -280,7 +295,7 @@ def main():
     n = N #fps*t
     
     # For single image:
-    #Complex_1(10)
+    #Complex_1(100)
     
     # For single process:
     #for i in tqdm(np.linspace(0, N, N).astype(int)):
@@ -288,8 +303,9 @@ def main():
     #    Complex_1(i)
     
     # For multi-processing
-    pool = Pool(2)
-    pool.map(Complex_1, np.linspace(0,N,N).astype(int))
+    process_map(   Complex_1, 
+                    np.arange(0,N-1).astype(int), 
+                    max_workers=4)
     
     #Plot_rv(goodfile_path)
     #Plot_xy(goodfile_path)
