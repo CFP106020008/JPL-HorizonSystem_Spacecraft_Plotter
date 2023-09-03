@@ -21,11 +21,11 @@ from tqdm import tqdm
 
 # To make the plot COOL
 plt.style.use('dark_background')
-raw_path = "PSP.txt"
-goodfile_path = "PSP.csv"
-Venus_raw = "Venus.txt"
-Venus_path = "Venus.csv"
-finalimage_path = "PSP.png"
+raw_path = "CH3.txt"
+goodfile_path = "CH3.csv"
+#Venus_raw = "Venus.txt"
+#Venus_path = "Venus.csv"
+finalimage_path = "CH3.png"
 Figfacecolor = '#333333'
 Axfacecolor = '#1c1c1c'
 color_r = 'yellow'
@@ -70,12 +70,12 @@ def Plot_rv(goodfile_path):
     ax1.plot(D.days, D.r, color=color_r)
     ax1.set_facecolor(Axfacecolor)
     ax1.set_xlabel("Mission time (days)")
-    ax1.set_ylabel("Distance to Sun (km)")
+    ax1.set_ylabel("Distance to the Earth (km)")
     ax1.set_xlim([0, np.array(D['days'])[-1]])
     
     # Plot v part
     ax2.plot(D.days, D.v, color=color_v)
-    ax2.set_ylabel("Velocity relative to Sun (km/s)")
+    ax2.set_ylabel("Velocity relative to the Earth (km/s)")
     
     plt.tight_layout()
     plt.savefig(finalimage_path, dpi=300, facecolor='#333333')
@@ -115,15 +115,15 @@ def Plot_xyz(goodfile_path, ax, i, Color='yellow', Axis=False, start=0):
     ax.plot(D['X'][start:i], D['Y'][start:i], D['Z'][start:i], color=Color)
     ax.scatter(D['X'][i], D['Y'][i], D['Z'][i], color=Color, s=10)
     
-    ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-    ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-    ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+    ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+    ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
+    ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
     
     ax.scatter(0,0,0,color='yellow',s=100)
     
-    ax.w_xaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
-    ax.w_yaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
-    ax.w_zaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
+    ax.xaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
+    ax.yaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
+    ax.zaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
     
     ax.xaxis._axinfo["grid"]['color'] =  (1,1,1,0)
     ax.yaxis._axinfo["grid"]['color'] =  (1,1,1,0)
@@ -155,10 +155,11 @@ def Plot_r(good_path, ax, i=0, Dot=False):
     ax.plot(D.days[:i], D.r[:i], color=color_r)
     ax.set_facecolor(Axfacecolor)
     #ax.set_xlabel("Mission time (days)")
-    ax.set_ylabel("Distance to Sun (km)")
+    ax.set_ylabel("Distance to the Earth (km)")
     ax.set_xlim([0, np.array(D['days'])[-1]])
     ax.set_xticks([])
-    ax.set_ylim([0,1.6e8])
+    ax.set_ylim([0,4.5e5])
+    ax.ticklabel_format(axis='y', style='sci', scilimits=(4, 1))
     
     ax.scatter(D.days[i], D.r[i], s=10, color=color_v)
     
@@ -182,8 +183,8 @@ def Plot_v(good_path, ax, i=0, Dot=False):
     ax.plot(D.days[:i], D.v[:i], color=color_v)
     ax.set_facecolor(Axfacecolor)
     ax.set_xlabel("Mission time (days)")
-    ax.set_ylabel("Velocity relative to Sun (km/s)")
-    ax.set_ylim([0,170])
+    ax.set_ylabel("Velocity relative to the Earth (km/s)")
+    ax.set_ylim([0,15])
     
     ax.scatter(D.days[i], D.v[i], s=10, color=color_v)
     
@@ -207,24 +208,24 @@ def Complex_1(i, Dot=True):
     ax1 = fig.add_subplot(gs[:,:2],projection='3d', facecolor=Axfacecolor)
     
     # This is Venus
-    ax1 = Plot_xyz(Venus_path, 
-                   ax1, 
-                   i, 
-                   Color='orange', 
-                   start=0)
+    #ax1 = Plot_xyz(Venus_path, 
+    #               ax1, 
+    #               i, 
+    #               Color='orange', 
+    #               start=0)
     # This is Earth
-    ax1 = Plot_xyz("Earth.csv", 
-                   ax1, 
-                   i, 
-                   Color='skyblue', 
-                   start=0)
-    # This is Mercury
-    ax1 = Plot_xyz("Mercury.csv", 
+    ax1 = Plot_xyz("Moon.csv", 
                    ax1, 
                    i, 
                    Color='gray', 
                    start=0)
-    # This is PSP
+    # This is Mercury
+    #ax1 = Plot_xyz("Mercury.csv", 
+    #               ax1, 
+    #               i, 
+    #               Color='gray', 
+    #               start=0)
+    # This is the target
     ax1 = Plot_xyz(goodfile_path, 
                    ax1, 
                    i, 
@@ -240,15 +241,15 @@ def Complex_1(i, Dot=True):
     
 def main():
     transform_raw(raw_path, goodfile_path)
-    transform_raw(Venus_raw, Venus_path)
-    transform_raw("Earth.txt", "Earth.csv")
-    transform_raw("Mercury.txt", "Mercury.csv")
+    #transform_raw(Venus_raw, Venus_path)
+    transform_raw("Moon.txt", "Moon.csv")
+    #transform_raw("Mercury.txt", "Mercury.csv")
     D = pd.read_csv(goodfile_path)
     N = D['X'].size
     fps= 30
-    t = 20
+    t = 70
     n = fps*t
-    #Complex_1(100)
+    #Complex_1(1800)
     for i in tqdm(np.linspace(0, N-1, n).astype(int)):
         Complex_1(i)
     #Plot_rv(goodfile_path)
