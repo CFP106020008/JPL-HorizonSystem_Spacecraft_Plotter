@@ -20,5 +20,6 @@ def main():
     CH3 = One_Scene(['CH3.txt', 'Moon.txt'])
     CH3.do_all_convertions()
     CH3.make_animation()
+    #CH3.make_final()
 
 main()

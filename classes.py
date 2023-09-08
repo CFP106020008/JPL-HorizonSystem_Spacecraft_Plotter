@@ -115,7 +115,7 @@ class One_Scene:
         ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         
-        ax.scatter(0,0,0,color='yellow',s=100)
+        ax.scatter(0,0,0,color='skyblue',s=100)
         
         ax.xaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
         ax.yaxis.line.set_color((1.0, 1.0, 1.0, 0.0))
@@ -190,7 +190,7 @@ class One_Scene:
         
         return ax
 
-    def Complex_1(self, i, Dot=True):
+    def Complex_1(self, i, num, Dot=True):
         fig = plt.figure(figsize=(12,27/4), facecolor=self.Figfacecolor)
         gs = GridSpec(2, 4, figure=fig,
                     left = 0.0625/1.5,
@@ -213,13 +213,13 @@ class One_Scene:
                     ax1, 
                     i, 
                     Axis=True,
-                    start=max(0, i-100))
+                    start=max(0, i-500))
         ax2 = fig.add_subplot(gs[0,2:])
         ax2 = self.Plot_r(self.source_list[0], ax2, i)
         ax3 = fig.add_subplot(gs[1,2:])
         ax3 = self.Plot_v(self.source_list[0], ax3, i)
         #plt.tight_layout()
-        plt.savefig("./images/{:04d}.jpg".format(i), dpi=300, facecolor=self.Figfacecolor)
+        plt.savefig("./images/{:04d}.jpg".format(num), dpi=300, facecolor=self.Figfacecolor)
         plt.close()
 
     def do_all_convertions(self):
@@ -230,12 +230,12 @@ class One_Scene:
     def make_animation(self):
         D = pd.read_csv(self.source_list[0])
         N = D['X'].size
-        fps= 30
-        t = 10
+        fps= 20
+        t = 30
         n = fps*t
         #Complex_1(1800)
-        for i in tqdm(np.linspace(0, N-1, n).astype(int)):
-            self.Complex_1(i)
+        for num, i in enumerate(tqdm(np.linspace(0, N-1, n).astype(int))):
+            self.Complex_1(i, num)
         #Plot_rv(goodfile_path)
         #Plot_xy(goodfile_path)
         #Plot_phasespace(goodfile_path)
@@ -243,3 +243,6 @@ class One_Scene:
         
         #plt.show()
         return
+    def make_final(self):
+        D = pd.read_csv(self.source_list[0])
+        self.Complex_1(D['X'].size - 1, D['X'].size - 1)
