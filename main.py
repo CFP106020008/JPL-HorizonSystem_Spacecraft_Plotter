@@ -17,9 +17,10 @@ from classes import One_Scene
 
 def main():
     plt.style.use('dark_background')
-    CH3 = One_Scene(['CH3.txt', 'Moon.txt'])
-    CH3.do_all_convertions()
-    CH3.make_animation()
-    #CH3.make_final()
+    s = One_Scene(['Clipper.txt', 'Io.txt', 'Europa.txt', 'Ganymede.txt', 'Callisto.txt'])
+    s.do_all_convertions()
+    s.make_animation(fps=60, t=30)
+    #s.make_final()
 
-main()
+if __name__ == '__main__':
+    main()
