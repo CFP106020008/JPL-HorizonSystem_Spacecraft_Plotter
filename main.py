@@ -19,8 +19,8 @@ def main():
     plt.style.use('dark_background')
     s = One_Scene(['Clipper.txt', 'Io.txt', 'Europa.txt', 'Ganymede.txt', 'Callisto.txt'])
     s.do_all_convertions()
-    s.make_animation(fps=60, t=30)
-    #s.make_final()
+    #s.make_animation(fps=30, t=60)
+    s.make_final()
 
 if __name__ == '__main__':
     main()

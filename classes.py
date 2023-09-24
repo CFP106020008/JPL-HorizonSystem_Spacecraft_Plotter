@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import pandas as pd
 from tqdm import tqdm
+from multiprocessing import Process, Pool
 
 
 class One_Scene:
@@ -95,13 +96,16 @@ class One_Scene:
         ax.set_aspect('equal', adjustable='box')
         #plt.show()    
         
-    def Plot_xyz(self, goodfile_path, ax, i, Color='yellow', Axis=False, start=0):
+    def Plot_xyz(self, goodfile_path, ax, i, 
+                 Color='yellow', Axis=False, start=0, 
+                 orient=[30, 135]
+                 ):
         D = pd.read_csv(goodfile_path)
         #fig = plt.figure(facecolor=Figfacecolor, figsize=(6,6))
         #ax = fig.add_subplot(projection='3d', facecolor=Axfacecolor)
         
-        #rmax = np.max((D['X']**2 + D['Y'] + D['Z']**2)**0.5)
-        rmax = 0.3e7
+        rmax = np.max((D['X']**2 + D['Y'] + D['Z']**2)**0.5)
+        #rmax = 1e1
         
         arrow_scale = 1.5
         if Axis:
@@ -110,7 +114,7 @@ class One_Scene:
             ax.quiver(0, 0, -arrow_scale*rmax, 0, 0, 2*arrow_scale*rmax, color='w', arrow_length_ratio=0.05) # z-axis
         
         ax.plot(D['X'][start:i], D['Y'][start:i], D['Z'][start:i], color=Color)
-        ax.scatter(D['X'][i], D['Y'][i], D['Z'][i], color=Color, s=10)
+        ax.scatter(D['X'][i], D['Y'][i], D['Z'][i], color=Color, s=20, label=goodfile_path.split('.')[0])
         
         ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
         ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
@@ -133,6 +137,8 @@ class One_Scene:
         ax.set_xlim([-rmax, rmax])
         ax.set_ylim([-rmax, rmax])
         ax.set_zlim([-rmax, rmax])
+        
+        ax.view_init(orient[0], orient[1])
         #plt.tight_layout()
         #plt.show()
         return ax
@@ -191,7 +197,7 @@ class One_Scene:
         
         return ax
 
-    def Complex_1(self, i, num, Dot=True, tail=3000):
+    def Complex_1(self, i, num, orient, Dot=True, tail=1000):
         fig = plt.figure(figsize=(12,27/4), facecolor=self.Figfacecolor)
         gs = GridSpec(2, 4, figure=fig,
                     left = 0.0625/1.5,
@@ -214,11 +220,43 @@ class One_Scene:
                     ax1, 
                     i, 
                     Axis=True,
-                    start=max(0, i-tail))
+                    start=max(0, i-tail), 
+                    orient=orient)
+        ax1.legend(loc='upper right')
         ax2 = fig.add_subplot(gs[0,2:])
         ax2 = self.Plot_r(self.source_list[0], ax2, i)
         ax3 = fig.add_subplot(gs[1,2:])
         ax3 = self.Plot_v(self.source_list[0], ax3, i)
+        #plt.tight_layout()
+        plt.savefig("./images/{:04d}.jpg".format(num), dpi=300, facecolor=self.Figfacecolor)
+        plt.close()
+    
+    def Complex_2(self, i, num, orient, Dot=True, tail=1000):
+        fig = plt.figure(figsize=(6,6), facecolor=self.Figfacecolor)
+        gs = GridSpec(2, 2, figure=fig,
+                    left = 0.,
+                    right = 1,
+                    top = 1,
+                    bottom = 0,
+                    wspace = 0,
+                    hspace = 0.,
+                    width_ratios=[1, 1]
+                    )
+        ax1 = fig.add_subplot(gs[:,:],projection='3d', facecolor=self.Axfacecolor)
+        
+        for ii, source in enumerate(self.source_list[1:]):
+            ax1 = self.Plot_xyz(source, 
+                        ax1, 
+                        i, 
+                        Color=f'C{ii}', 
+                        start=0)
+        ax1 = self.Plot_xyz(self.source_list[0], 
+                    ax1, 
+                    i, 
+                    Axis=True,
+                    start=max(0, i-tail), 
+                    orient=orient)
+        ax1.legend(loc='upper right')
         #plt.tight_layout()
         plt.savefig("./images/{:04d}.jpg".format(num), dpi=300, facecolor=self.Figfacecolor)
         plt.close()
@@ -228,13 +266,28 @@ class One_Scene:
             self.transform_raw(source, source.split('.')[0]+'.csv')
             self.source_list[i] = source.split('.')[0]+'.csv'
     
-    def make_animation(self, fps=30, t=30):
+    def make_animation(self, fps=30, t=30, rotation_period=30):
+        '''
+        rotationa_period is in the unit of s
+        '''
         D = pd.read_csv(self.source_list[0])
         N = D['X'].size
         n = fps*t
+        pool = Pool(4)
+        inputs = []
+        # for multiprocessing
         for num, i in enumerate(tqdm(np.linspace(0, N-1, n).astype(int))):
-            self.Complex_1(i, num)
+            theta = 30 # this is actually elevation, not theta in the spherical coordinate.
+            phi = 360*num/(fps*rotation_period) 
+            orient = [theta, phi]
+            inputs.append([i, num, orient])
+        #pool.starmap(self.Complex_1, inputs)
+        pool.starmap(self.Complex_2, inputs)
+
+            #self.Complex_1(i, num)
         return
     def make_final(self):
         D = pd.read_csv(self.source_list[0])
-        self.Complex_1(D['X'].size - 1, D['X'].size - 1, tail=D['X'].size-10)
+        orient = [30, 135]
+        #self.Complex_1(D['X'][:-1].size - 1, D['X'][:-1].size - 1, tail=D['X'][:-1].size-10, orient=orient)
+        self.Complex_2(D['X'][:-1].size - 1, D['X'][:-1].size - 1, tail=D['X'][:-1].size-10, orient=orient)
